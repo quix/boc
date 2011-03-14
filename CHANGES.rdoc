@@ -1,6 +1,11 @@
 
 = boc Changes
 
+== Version 0.3.1
+
+* add prototype for rb_funcall_passing block
+  (http://redmine.ruby-lang.org/issues/4504)
+
 == Version 0.3.0
 
 * birthday
