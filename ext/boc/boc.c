@@ -1,5 +1,8 @@
 #include "ruby.h"
 
+VALUE
+rb_funcall_passing_block(VALUE recv, ID mid, int argc, const VALUE *argv) ;
+
 static VALUE cBoc ;
 
 static VALUE basic_object_method_sym ;
