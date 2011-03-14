@@ -1,0 +1,107 @@
+
+= boc
+
+== Summary
+
+Binding of caller.
+
+== Synopsis
+
+  require 'boc'
+
+  class A
+    def f
+      p eval("x", Boc.value)
+    end
+  end
+
+  Boc.enable A, :f
+  x = 33
+  A.new.f  # => 33
+
+== Install
+
+  % gem install boc
+
+Or from inside an unpacked .tgz download, <code>rake install</code> /
+<code>rake uninstall</code>.
+
+== Description
+
+Binding of caller: obtain a caller's binding.
+
+MRI 1.9.2 is required. Support for other Ruby platforms is a goal.
+
+== Binding.of_caller shim for Ruby-1.8 code
+
+<code>require 'boc/binding_of_caller'</code> will define
+<code>Binding.of_caller</code>.
+
+  require 'boc/binding_of_caller'
+
+  class A
+    def f
+      Binding.of_caller do |bind|
+        p eval("x", bind)
+      end
+    end
+  end
+
+  Boc.enable A, :f
+  x = 33
+  A.new.f  # => 33
+
+This is not an actual compatibility layer since the call to +enable+
+is still necessary. <code>Binding.of_caller</code> is merely a
+convenience method for existing 1.8 code.
+
+== Links
+
+* Home: http://quix.github.com/boc
+* Feature Requests, Bug Reports: http://github.com/quix/boc/issues
+* Manual Download: http://github.com/quix/boc/archives/master
+* Repository: http://github.com/quix/boc
+
+== Background
+
+After adapting the old continuation-based
+<code>Binding.of_caller</code> to 1.9.2
+(http://quix.github.com/binding_of_caller), I found the result
+unsatisfying. There are some syntax restrictions surrounding the use
+of it, and though workaroundable they raise practical problems.
+
+Since code which accesses VM innards in order to obtain a caller's
+binding may be subject to future breakage, the implementation
+presented herein (Boc) is a compromise. In exchange for restricting
+functionality (the additional requirement of an +enable+ call),
+binding-of-caller may be implemented straightforwardly with only the
+public C API, meaning that it should work on future MRI releases.
+
+== Author
+
+* James M. Lawrence < quixoticsycophant@gmail.com >
+
+== License
+  
+  Copyright (c) 2011 James M. Lawrence. All rights reserved.
+  
+  Permission is hereby granted, free of charge, to any person
+  obtaining a copy of this software and associated documentation files
+  (the "Software"), to deal in the Software without restriction,
+  including without limitation the rights to use, copy, modify, merge,
+  publish, distribute, sublicense, and/or sell copies of the Software,
+  and to permit persons to whom the Software is furnished to do so,
+  subject to the following conditions:
+  
+  The above copyright notice and this permission notice shall be
+  included in all copies or substantial portions of the Software.
+  
+  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+  BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+  ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+  CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  SOFTWARE.
+
