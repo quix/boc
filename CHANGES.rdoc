@@ -1,6 +1,11 @@
 
 = boc Changes
 
+== Version 0.3.2
+
+* "rake test" now works without rake-compiler on Windows
+* additions to readme
+
 == Version 0.3.1
 
 * add prototype for rb_funcall_passing block
