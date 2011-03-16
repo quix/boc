@@ -38,11 +38,6 @@ ensure_section( VALUE unused )
             rb_intern("stack"),
             0)) ;
 
-    rb_thread_local_aset(
-        rb_thread_current(),
-        rb_intern("_boc_inside_enabled_method"),
-        Qfalse) ;
-
     return Qnil ;
 }
 
@@ -67,11 +62,6 @@ dispatch_common( VALUE method_sym, int argc, VALUE *argv, VALUE self )
             rb_intern("stack"),
             0),
         rb_binding_new()) ;
-
-    rb_thread_local_aset(
-        rb_thread_current(),
-        rb_intern("_boc_inside_enabled_method"),
-        Qtrue) ;
 
     return rb_ensure(
         begin_section,

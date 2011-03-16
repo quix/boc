@@ -38,12 +38,8 @@ module Boc
     # <code>enable</code>d method.
     #
     def value
-      raise NotEnabledError unless inside_enabled_method
+      raise NotEnabledError if stack.empty?
       stack.last
-    end
-
-    def inside_enabled_method  #:nodoc:
-      Thread.current[:_boc_inside_enabled_method]
     end
 
     def stack  #:nodoc:
