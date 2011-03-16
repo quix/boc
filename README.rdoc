@@ -32,10 +32,10 @@ Binding of caller: obtain a caller's binding.
 
 MRI 1.9.2 is required. Support for other Ruby platforms is a goal.
 
-== Binding.of_caller shim for Ruby-1.8 code
+== <code>Binding.of_caller</code>
 
 <code>require 'boc/binding_of_caller'</code> will define
-<code>Binding.of_caller</code>.
+<code>Binding.of_caller</code> (not present by default).
 
   require 'boc/binding_of_caller'
 
@@ -62,20 +62,32 @@ convenience method for existing 1.8 code.
 * Manual Download: http://github.com/quix/boc/archives/master
 * Repository: http://github.com/quix/boc
 
+== Implementation
+
+<code>Boc.enable(A, :f)</code> is essentially
+
+  class A
+    alias_method :f__impl, :f
+  end
+
+followed by a redefinition of +f+. The new +f+ is a native method
+which sets <code>Boc.value</code> and then forwards the incoming
+arguments to +f__impl+.
+
 == Background
 
 After adapting the old continuation-based
 <code>Binding.of_caller</code> to 1.9.2
 (http://quix.github.com/binding_of_caller), I found the result
-unsatisfying. There are some syntax restrictions surrounding the use
-of it, and though workaroundable they raise practical problems.
+unsatisfying. There were syntax restrictions surrounding the use of
+it, and though workaroundable they raised practical problems.
 
-Since code which accesses VM innards in order to obtain a caller's
-binding may be subject to future breakage, the implementation
-presented herein (Boc) is a compromise. In exchange for restricting
-functionality (the additional requirement of an +enable+ call),
+While a caller's binding might be obtained by accessesing VM innards,
+this approach would be subject to future breakage. The implementation
+presented herein is a compromise. In exchange for restricting
+functionality (the additional requirement of +enable+),
 binding-of-caller may be implemented straightforwardly with only the
-public C API, meaning that it should work on future MRI releases.
+public C API, meaning that it should work in future MRI releases.
 
 == Author
 
