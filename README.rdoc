@@ -30,7 +30,8 @@ Or from inside an unpacked .tgz download, <code>rake install</code> /
 
 Binding of caller: obtain a caller's binding.
 
-MRI 1.9.2 is required. Support for other Ruby platforms is a goal.
+MRI 1.9.2 or JRuby 1.6+ is required. Support for other Ruby platforms
+is a goal.
 
 == <code>Binding.of_caller</code>
 
@@ -64,15 +65,14 @@ convenience method for existing 1.8 code.
 
 == Implementation
 
-<code>Boc.enable(A, :f)</code> is essentially
+When <code>Boc.enable(A, :f)</code> is called it first makes an alias,
 
   class A
     alias_method :f__impl, :f
   end
 
-followed by a redefinition of +f+. The new +f+ is a native method
-which sets <code>Boc.value</code> and then forwards the incoming
-arguments to +f__impl+.
+Following that, +f+ is replaced by native method whose only tasks are
+to set <code>Boc.value</code> and then call +f__impl+.
 
 == Background
 

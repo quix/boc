@@ -1,5 +1,4 @@
-
-require 'boc.so'
+require 'boc/boc'
 
 module Boc
   class << self

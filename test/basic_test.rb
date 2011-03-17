@@ -93,11 +93,13 @@ class BasicTest < BocTest
 
   module R
     def self.factorial_of_x
-      x = eval("x", Boc.value) - if caller.grep(/#{__method__}/).size == 1
-                                   0
-                                 else
-                                   1
-                                 end
+      x = eval("x", Boc.value) -
+        if caller.grep(/#{__method__}/).size == (RUBY_ENGINE == "jruby" ? 0 : 1)
+          0
+        else
+          1
+        end
+      
       if x == 0
         1
       else
@@ -122,17 +124,17 @@ class BasicTest < BocTest
   def test_basic_object
     begin
       BasicObject.module_eval do
-        def edc4739da630326a8
+        def zoofoo
           ::Kernel.eval("z", ::Boc.value)
         end
       end
 
-      Boc.enable_basic_object BasicObject, :edc4739da630326a8
+      Boc.enable_basic_object BasicObject, :zoofoo
       z = 77
-      assert_equal 77, BasicObject.new.edc4739da630326a8
+      assert_equal 77, BasicObject.new.zoofoo
     ensure
       BasicObject.module_eval do
-        remove_method :edc4739da630326a8
+        remove_method :zoofoo
       end
     end
   end
@@ -156,5 +158,35 @@ class BasicTest < BocTest
     assert D.public_instance_methods.include?(:f)
     assert D.protected_instance_methods.include?(:g)
     assert D.private_instance_methods.include?(:h)
+  end
+
+  class K
+    def f(bind)
+      eval("self", bind)
+    end
+
+    def self.g
+      self.new.f(binding)
+    end
+  end
+
+  def test_self_control
+    Boc.enable K, :f
+    assert_equal K, K.g
+  end
+
+  class L
+    def f
+      eval("self", Boc.value)
+    end
+
+    def self.g
+      self.new.f
+    end
+  end
+
+  def test_self
+    Boc.enable L, :f
+    assert_equal L, L.g
   end
 end
