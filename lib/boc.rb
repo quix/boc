@@ -23,7 +23,7 @@ module Boc
             end
 
           impl = "#{method_name}__impl"
-          alias_method impl, method_name
+          Boc.no_warn { alias_method impl, method_name }
           Boc.send "#{def_method}_ext", klass, method_name
           
           send visibility, method_name
@@ -43,6 +43,17 @@ module Boc
 
     def stack  #:nodoc:
       Thread.current[:_boc_stack] ||= []
+    end
+
+    # squelch alias warnings
+    def no_warn  #:nodoc:
+      prev = $VERBOSE
+      $VERBOSE = nil
+      begin
+        yield
+      ensure
+        $VERBOSE = prev
+      end
     end
   end
 
