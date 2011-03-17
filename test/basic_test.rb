@@ -158,6 +158,10 @@ class BasicTest < BocTest
     assert D.public_instance_methods.include?(:f)
     assert D.protected_instance_methods.include?(:g)
     assert D.private_instance_methods.include?(:h)
+
+    D.new.f
+    D.new.instance_eval { g }
+    D.new.instance_eval { h }
   end
 
   class K
