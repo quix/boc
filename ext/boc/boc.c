@@ -15,8 +15,7 @@ struct dispatch_args
     ID method_id ;
 } ;
 
-static
-VALUE
+static VALUE
 begin_section( VALUE data )
 {
     struct dispatch_args* dargs = (struct dispatch_args*)data ;
@@ -28,8 +27,7 @@ begin_section( VALUE data )
         dargs->argv) ;
 }
 
-static
-VALUE
+static VALUE
 ensure_section( VALUE unused )
 {
     rb_ary_pop(
@@ -70,8 +68,7 @@ dispatch_common( VALUE method_sym, int argc, VALUE *argv, VALUE self )
         Qnil) ;
 }
 
-static
-VALUE
+static VALUE
 dispatch_normal( int argc, VALUE *argv, VALUE self )
 {
     return dispatch_common(
@@ -84,8 +81,7 @@ dispatch_normal( int argc, VALUE *argv, VALUE self )
         self) ;
 }
 
-static
-VALUE
+static VALUE
 dispatch_basic_object(int argc, VALUE *argv, VALUE self)
 {
     return dispatch_common(
@@ -95,8 +91,7 @@ dispatch_basic_object(int argc, VALUE *argv, VALUE self)
         self) ;
 }
 
-static
-VALUE
+static VALUE
 enable_ext( VALUE self, VALUE klass, VALUE method_sym )
 {
     rb_define_method(
@@ -108,8 +103,7 @@ enable_ext( VALUE self, VALUE klass, VALUE method_sym )
     return Qnil ;
 }
 
-static
-VALUE
+static VALUE
 enable_basic_object_ext( VALUE self, VALUE klass, VALUE method_sym )
 {
     basic_object_method_sym = method_sym ;
