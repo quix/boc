@@ -189,4 +189,17 @@ class BasicTest < BocTest
     Boc.enable L, :f
     assert_equal L, L.g
   end
+
+  class K
+    def k
+    end
+  end
+
+  def test_double_enable
+    Boc.enable K, :k
+    error = assert_raises Boc::AlreadyEnabledError do
+      Boc.enable K, :k
+    end
+    assert_match(/method `k'.*already/, error.message)
+  end
 end

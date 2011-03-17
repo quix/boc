@@ -23,6 +23,13 @@ module Boc
             end
 
           impl = "#{method_name}__impl"
+          
+          if method_defined?(impl) or private_method_defined?(impl)
+            raise AlreadyEnabledError, 
+            "Boc.enable: refusing to overwrite `#{impl}' -- " +
+              "method `#{method_name}' appears to be already enabled"
+          end
+          
           Boc.no_warn { alias_method impl, method_name }
           Boc.send "#{def_method}_ext", klass, method_name
           
@@ -37,7 +44,10 @@ module Boc
     # <code>enable</code>d method.
     #
     def value
-      raise NotEnabledError if stack.empty?
+      if stack.empty?
+        raise NotEnabledError,
+        "Boc.value was called outside of an enabled method"
+      end
       stack.last
     end
 
@@ -61,9 +71,13 @@ module Boc
   # Boc.value was called outside of an <code>enable</code>d method.
   #
   class NotEnabledError < StandardError
-    def message  #:nodoc:
-      "Boc.value was called outside of an enabled method"
-    end
+  end
+
+  #
+  # The method given to <code>Boc.enable</code> appears to be already
+  # enabled.
+  #
+  class AlreadyEnabledError < StandardError
   end
 
   #
