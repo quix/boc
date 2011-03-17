@@ -1,6 +1,11 @@
 
 = boc Changes
 
+== Version 0.4.2
+
+* add jruby support
+* add AlreadyEnabledError
+
 == Version 0.3.2
 
 * "rake test" now works without rake-compiler on Windows
