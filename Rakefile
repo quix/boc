@@ -5,7 +5,7 @@ def config
   @s.developers << ["James M. Lawrence", "quixoticsycophant@gmail.com"]
   @s.username = "quix"
   @s.required_ruby_version = ">= 1.9.2"
-  @s.development_dependencies << ["rake-compiler", "~> 0.7.6"]
+  @s.dependencies << ["rake-compiler", "~> 0.7.6"]
   @s.rdoc_files = %w[
     lib/boc.rb
     lib/boc/version.rb
@@ -15,7 +15,7 @@ end
 def mri_ext
   require 'rake/extensiontask'
     
-  Rake::ExtensionTask.new @s.gem_name, @s.gemspec do |ext|
+  Rake::ExtensionTask.new @s.gem_name, binary_gemspec do |ext|
     ext.cross_compile = true
     ext.cross_platform = 'i386-mswin32'
     ext.lib_dir = "lib/#{@s.gem_name}"
@@ -39,7 +39,7 @@ def jruby_ext
   require "rake/javaextensiontask"
 
   Levitate.no_warnings do
-    Rake::JavaExtensionTask.new @s.gem_name, @s.gemspec do |ext|
+    Rake::JavaExtensionTask.new @s.gem_name, binary_gemspec do |ext|
       ext.ext_dir = "jext"
       ext.lib_dir = "lib/#{@s.gem_name}"
     end
@@ -119,6 +119,13 @@ def config_extension
     mri_ext
   else
     raise "sorry, platform `#{RUBY_ENGINE}' not supported"
+  end
+end
+
+def binary_gemspec
+  Marshal.load(Marshal.dump(@s.gemspec)).tap do |gemspec|
+    gemspec.dependencies.clear
+    gemspec.add_development_dependency(*@s.dependencies.first)
   end
 end
 
