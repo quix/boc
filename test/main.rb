@@ -4,6 +4,8 @@ require 'minitest/unit'
 require 'minitest/autorun' unless defined? Rake
 
 require 'pp'
+
+$VERBOSE = true
 require 'boc'
 
 class JLMiniTest < MiniTest::Unit::TestCase
