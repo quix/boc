@@ -179,21 +179,6 @@ class BasicTest < BocTest
     assert_equal K, K.g
   end
 
-  class L
-    def f
-      eval("self", Boc.value)
-    end
-
-    def self.g
-      self.new.f
-    end
-  end
-
-  def test_self
-    Boc.enable L, :f
-    assert_equal L, L.g
-  end
-
   class K
     def k
     end
@@ -205,5 +190,32 @@ class BasicTest < BocTest
       Boc.enable K, :k
     end
     assert_match(/method `k'.*already/, error.message)
+  end
+
+  class L
+    def f
+      eval("self", Boc.value)
+    end
+
+    class << self
+      def g
+        new.f
+      end
+
+      def h
+        Array.class_eval { L.new.f }
+      end
+
+      def i
+        Array.new.instance_eval { L.new.f }
+      end
+    end
+  end
+
+  def test_self
+    Boc.enable L, :f
+    assert_equal L, L.g
+    assert_equal Array, L.h
+    assert_equal Array, L.i.class
   end
 end
