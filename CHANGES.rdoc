@@ -1,6 +1,10 @@
 
 = boc Changes
 
+== Version 0.4.3
+
+* fix rake-compiler dependencies
+
 == Version 0.4.2
 
 * add jruby support
