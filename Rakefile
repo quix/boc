@@ -123,7 +123,7 @@ def config_extension
 end
 
 def binary_gemspec
-  Marshal.load(Marshal.dump(@s.gemspec)).tap do |gemspec|
+  @s.gemspec.dup.tap do |gemspec|
     gemspec.dependencies.clear
     gemspec.add_development_dependency(*@s.dependencies.first)
   end
