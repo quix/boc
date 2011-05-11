@@ -7,7 +7,7 @@ class Levitate
 
     yield self
 
-    self.class.instance_methods(false).each do |name|
+    self.class.instance_methods(false).sort.each do |name|
       if name.to_s =~ %r!\Adefine_!
         send(name)
       end
@@ -172,7 +172,6 @@ class Levitate
         t = send(param) and g.send("#{param}=", t)
       end
       g.name = gem_name
-      g.has_rdoc = true
       g.homepage = url if url
       dependencies.each { |dep|
         g.add_dependency(*dep)
