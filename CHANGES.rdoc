@@ -1,6 +1,10 @@
 
 = boc Changes
 
+== Version 0.4.4
+
+* update build tools
+
 == Version 0.4.3
 
 * fix rake-compiler dependencies
