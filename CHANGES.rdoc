@@ -1,6 +1,10 @@
 
 = boc Changes
 
+== Version 0.4.5
+
+* Rake 0.9 compatibility 
+
 == Version 0.4.4
 
 * update build tools
