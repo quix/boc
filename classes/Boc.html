@@ -1,0 +1,131 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>Boc</title>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <link href='../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='class' id='wrapper'>
+      <div class='header'>
+        <h1 class='name'>
+          <span class='type'>module</span>
+          Boc
+        </h1>
+        <ol class='paths'>
+          <li>
+            <a target="docwin" href="../files/lib/boc/version_rb.html">lib/boc/version.rb</a>
+          </li>
+          <li class='other'>
+            <a target="docwin" href="../files/lib/boc_rb.html">lib/boc.rb</a>
+          </li>
+          <li>
+            <a class='show' href='#' onclick='this.parentNode.parentNode.className += " expanded"; this.parentNode.removeChild(this); return false'>show all</a>
+          </li>
+        </ol>
+        <div class='parent'>
+          Parent:
+          <strong><a target="docwin" href="../files/lib/boc_rb.html">boc.rb</a></strong>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'></div>
+          <div id='method-list'>
+            <h2>Methods</h2>
+            <h3>Public Class</h3>
+            <ol>
+              <li><a target="docwin" href="#method-c-enable">enable</a></li>
+              <li><a target="docwin" href="#method-c-value">value</a></li>
+            </ol>
+          </div>
+          <div id='context'>
+          </div>
+          <div id='section'>
+            <div id='class-list'>
+              <h2>Classes and Modules</h2>
+              <ol><li>NotEnabledError</li><li>AlreadyEnabledError</li></ol>
+            </div>
+            <div id='constants-list'>
+              <h2>Constants</h2>
+              <div class='name-list'>
+                <table summary='Constants'>
+                  <tr class='top-aligned-row context-row'>
+                    <td class='context-item-name'>VERSION</td>
+                    <td>=</td>
+                    <td class='context-item-value'>"0.4.5"</td>
+                    <td>&nbsp;</td>
+                    <td class='context-item-desc'></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+            <div id='methods'>
+              <h2>Public Class methods</h2>
+              <div class='method public-class' id='method-method-c-enable'>
+                <a name='method-c-enable'></a>
+                <div class='synopsis'>
+                  <span class='name'>
+                    <div> enable(klass, method_name)</div>
+                  </span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Enable <tt>Boc.value</tt> for the given instance method.
+                  </p>
+                  <pre>class A&#x000A;  def f&#x000A;    p eval(&quot;x&quot;, Boc.value)&#x000A;  end&#x000A;  &#x000A;  def self.g&#x000A;    p eval(&quot;x&quot;, Boc.value)&#x000A;  end&#x000A;end&#x000A;&#x000A;Boc.enable A, :f&#x000A;Boc.enable A.singleton_class, :g&#x000A;&#x000A;x = 33&#x000A;A.new.f  # =&gt; 33&#x000A;A.g  # =&gt; 33</pre>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-enable-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-enable-source'>    <span class="ruby-comment cmt"># File lib/boc.rb, line 28</span>&#x000A;28:   </pre>
+                </div>
+              </div>
+              <div class='method public-class' id='method-method-c-value'>
+                <a name='method-c-value'></a>
+                <div class='synopsis'>
+                  <span class='name'>value</span>
+                  <span class='arguments'>()</span>
+                </div>
+                <div class='description'>
+                  <p>
+                  Returns the binding of the caller. May only be used within an
+                  <tt>enable</tt>d method.
+                  </p>
+                </div>
+                <div class='source'>
+                  <a class='source-toggle' href='#' onclick="toggleCode('method-c-value-source'); return false">
+                    [show source]
+                  </a>
+                  <pre id='method-c-value-source'>    <span class="ruby-comment cmt"># File lib/boc.rb, line 47</span>&#x000A;47:     <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">value</span>&#x000A;48:       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">stack</span>.<span class="ruby-identifier">empty?</span>&#x000A;49:         <span class="ruby-identifier">raise</span> <span class="ruby-constant">NotEnabledError</span>, <span class="ruby-value str">&quot;Boc.value called outside of an enabled method&quot;</span>&#x000A;50:       <span class="ruby-keyword kw">end</span>&#x000A;51:       <span class="ruby-identifier">stack</span>.<span class="ruby-identifier">last</span>&#x000A;52:     <span class="ruby-keyword kw">end</span></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>

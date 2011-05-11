@@ -1,0 +1,138 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang='en'>
+  <head>
+    <title>README.rdoc</title>
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <link href='../css/style.css' media='screen' rel='stylesheet' type='text/css'>
+    <script type='text/javascript'>
+      //<![CDATA[
+        function popupCode(url) {
+          window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+        }
+        
+        function toggleCode(id) {
+          var code = document.getElementById(id)
+        
+          code.style.display = code.style.display != 'block' ? 'block' : 'none'
+          return true
+        }
+        
+        // Make codeblocks hidden by default
+        document.writeln('<' + 'style type="text/css">.method .source pre { display: none }<\/style>')
+      //]]>
+    </script>
+  </head>
+  <body class='page'>
+    <div class='file' id='wrapper'>
+      <div class='header'>
+        <div class='name'>README.rdoc</div>
+        <div class='paths'>
+          README.rdoc
+        </div>
+        <div class='last-update'>
+          Last Update:
+          <span class='datetime'>2011-05-24 14:47:19 -0400</span>
+        </div>
+      </div>
+      <div id='content'>
+        <div id='text'>
+          <div id='description'>
+            <h1>boc</h1>
+            <h2>Summary</h2>
+            <p>
+            Binding of caller.
+            </p>
+            <h2>Synopsis</h2>
+            <pre>require 'boc'&#x000A;&#x000A;class A&#x000A;  def f&#x000A;    p eval(&quot;x&quot;, Boc.value)&#x000A;  end&#x000A;end&#x000A;&#x000A;Boc.enable A, :f&#x000A;x = 33&#x000A;A.new.f  # =&gt; 33</pre>
+            <h2>Install</h2>
+            <pre>% gem install boc</pre>
+            <p>
+            Or from inside an unpacked .tgz download, <tt>rake install</tt> / <tt>rake
+            uninstall</tt>.
+            </p>
+            <h2>Description</h2>
+            <p>
+            Binding of caller: obtain a caller&#8217;s binding.
+            </p>
+            <p>
+            MRI 1.9.2 or JRuby 1.6+ is required. Support for other Ruby platforms is a
+            goal.
+            </p>
+            <h2><tt>Binding.of_caller</tt></h2>
+            <p>
+            <tt>require 'boc/binding_of_caller'</tt> will define
+            <tt>Binding.of_caller</tt> (not present by default).
+            </p>
+            <pre>require 'boc/binding_of_caller'&#x000A;&#x000A;class A&#x000A;  def f&#x000A;    Binding.of_caller do |bind|&#x000A;      p eval(&quot;x&quot;, bind)&#x000A;    end&#x000A;  end&#x000A;end&#x000A;&#x000A;Boc.enable A, :f&#x000A;x = 33&#x000A;A.new.f  # =&gt; 33</pre>
+            <p>
+            This is not an actual compatibility layer since the call to <tt>enable</tt>
+            is still necessary. <tt>Binding.of_caller</tt> is merely a convenience
+            method for existing 1.8 code.
+            </p>
+            <h2>Links</h2>
+            <ul>
+            <li><p>
+            Home: <a target="_top" href="http://quix.github.com/boc">quix.github.com/boc</a>
+            </p>
+            </li>
+            <li><p>
+            Feature Requests, Bug Reports: <a
+            href="http://github.com/quix/boc/issues">github.com/quix/boc/issues</a>
+            </p>
+            </li>
+            <li><p>
+            Manual Download: <a
+            href="http://github.com/quix/boc/archives/master">github.com/quix/boc/archives/master</a>
+            </p>
+            </li>
+            <li><p>
+            Repository: <a target="_top" href="http://github.com/quix/boc">github.com/quix/boc</a>
+            </p>
+            </li>
+            </ul>
+            <h2>Implementation</h2>
+            <p>
+            When <tt>Boc.enable(A, :f)</tt> is called it first makes an alias,
+            </p>
+            <pre>class A&#x000A;  alias_method :f__impl, :f&#x000A;end</pre>
+            <p>
+            Following that, <tt>f</tt> is replaced by native method whose only tasks
+            are to set <tt>Boc.value</tt> and then call <tt>f__impl</tt>.
+            </p>
+            <h2>Background</h2>
+            <p>
+            After adapting the old continuation-based <tt>Binding.of_caller</tt> to
+            1.9.2 (<a
+            href="http://quix.github.com/binding_of_caller">quix.github.com/binding_of_caller</a>),
+            I found the result unsatisfying. There were syntax restrictions surrounding
+            the use of it, and though workaroundable they raised practical problems.
+            </p>
+            <p>
+            While a caller&#8217;s binding might be obtained by accessesing VM innards,
+            this approach would be subject to future breakage. The implementation
+            presented herein is a compromise. In exchange for restricting functionality
+            (the additional requirement of <tt>enable</tt>), binding-of-caller may be
+            implemented straightforwardly with only the public C API, meaning that it
+            should work in future MRI releases.
+            </p>
+            <h2>Author</h2>
+            <ul>
+            <li><p>
+            James M. Lawrence < quixoticsycophant@gmail.com >
+            </p>
+            </li>
+            </ul>
+            <h2>License</h2>
+            <pre>Copyright (c) 2011 James M. Lawrence. All rights reserved.&#x000A;&#x000A;Permission is hereby granted, free of charge, to any person&#x000A;obtaining a copy of this software and associated documentation files&#x000A;(the &quot;Software&quot;), to deal in the Software without restriction,&#x000A;including without limitation the rights to use, copy, modify, merge,&#x000A;publish, distribute, sublicense, and/or sell copies of the Software,&#x000A;and to permit persons to whom the Software is furnished to do so,&#x000A;subject to the following conditions:&#x000A;&#x000A;The above copyright notice and this permission notice shall be&#x000A;included in all copies or substantial portions of the Software.&#x000A;&#x000A;THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND,&#x000A;EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF&#x000A;MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND&#x000A;NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS&#x000A;BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN&#x000A;ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN&#x000A;CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE&#x000A;SOFTWARE.</pre>
+          </div>
+          <div id='context'>
+          </div>
+        </div>
+      </div>
+      <div id='footer-push'></div>
+    </div>
+    <div id='footer'>
+      <a target="docwin" href="http://github.com/mislav/hanna/tree/master"><strong>Hanna</strong> RDoc template</a>
+    </div>
+  </body>
+</html>
